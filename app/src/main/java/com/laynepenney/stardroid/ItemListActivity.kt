@@ -1,4 +1,4 @@
-package com.laynepenney.androidfilmthings
+package com.laynepenney.stardroid
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,7 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
-import com.laynepenney.androidfilmthings.dummy.DummyContent
+import com.laynepenney.stardroid.dummy.DummyContent
 
 /**
  * An activity representing a list of Pings. This activity

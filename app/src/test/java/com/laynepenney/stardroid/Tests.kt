@@ -1,4 +1,4 @@
-package com.laynepenney.androidfilmthings
+package com.laynepenney.stardroid
 
 import com.squareup.moshi.adapter
 import okio.buffer

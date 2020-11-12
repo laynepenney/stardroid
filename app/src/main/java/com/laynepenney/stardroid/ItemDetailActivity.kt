@@ -1,4 +1,4 @@
-package com.laynepenney.androidfilmthings
+package com.laynepenney.stardroid
 
 import android.content.Intent
 import android.os.Bundle

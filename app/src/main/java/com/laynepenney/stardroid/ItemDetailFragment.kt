@@ -1,4 +1,4 @@
-package com.laynepenney.androidfilmthings
+package com.laynepenney.stardroid
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.laynepenney.androidfilmthings.dummy.DummyContent
+import com.laynepenney.stardroid.dummy.DummyContent
 
 /**
  * A fragment representing a single Item detail screen.

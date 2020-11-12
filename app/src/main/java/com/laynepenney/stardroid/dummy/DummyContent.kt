@@ -1,4 +1,4 @@
-package com.laynepenney.androidfilmthings.dummy
+package com.laynepenney.stardroid.dummy
 
 import java.util.ArrayList
 import java.util.HashMap

@@ -1,4 +1,4 @@
-package com.laynepenney.androidfilmthings
+package com.laynepenney.stardroid
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
@@ -20,11 +20,12 @@ const val Ids = "ids"
 //    )
 //}
 
-@ExperimentalStdlibApi
+// TODO: handle errors better
 class Cache(
     private val prefs: SharedPreferences,
     private val moshi: Moshi
 ) {
+    @ExperimentalStdlibApi
     private val EmptyList: String = emptyList<String>()
         .toJson(moshi)
 
@@ -38,18 +39,23 @@ class Cache(
 
 
     // TODO: ensure not main thread
+    @ExperimentalStdlibApi
     fun load(): FilmsResponse {
         val ids: List<String> = prefs.getString(Ids, EmptyList)!!
             .fromJson(moshi)
-        // TODO: handle errors better
-        val films = ids.map { id ->
-            val json = prefs.getString(id, null)!!
-            json.fromJson<Film>(moshi)
-        }
+        val films = ids.map(::loadFilm)
         return FilmsResponse(films.size, films)
     }
 
     // TODO: ensure not main thread
+    @ExperimentalStdlibApi
+    fun loadFilm(id: String): Film {
+        val json = prefs.getString(id, null)!!
+        return json.fromJson(moshi)
+    }
+
+    // TODO: ensure not main thread
+    @ExperimentalStdlibApi
     fun save(
         response: FilmsResponse
     ): Boolean {
