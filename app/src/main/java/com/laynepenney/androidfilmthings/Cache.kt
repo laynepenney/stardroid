@@ -7,6 +7,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapter
 
 const val FilmsFile = "films"
+const val Ids = "ids"
 
 // TODO: when switching to coroutines, switch to datastore instead of preferences
 //class CoroutineCache(
@@ -19,46 +20,47 @@ const val FilmsFile = "films"
 //    )
 //}
 
+@ExperimentalStdlibApi
 class Cache(
     private val prefs: SharedPreferences,
     private val moshi: Moshi
 ) {
+    private val EmptyList: String = emptyList<String>()
+        .toJson(moshi)
+
     constructor(
         context: Context,
         api: Api
     ) : this(
-        prefs = context.getSharedPreferences(FilmsFile, MODE_PRIVATE),
+        prefs = context.applicationContext.getSharedPreferences(FilmsFile, MODE_PRIVATE),
         moshi = api.moshi
     )
 
 
     // TODO: ensure not main thread
-    @ExperimentalStdlibApi
-    private fun load(): FilmsResponse {
-        val ids = prefs.getStringSet("ids", emptySet())!!
+    fun load(): FilmsResponse {
+        val ids: List<String> = prefs.getString(Ids, EmptyList)!!
+            .fromJson(moshi)
         // TODO: handle errors better
         val films = ids.map { id ->
-            val json = prefs.getString(id, null)
-            json!!.fromJson<Film>(moshi)
+            val json = prefs.getString(id, null)!!
+            json.fromJson<Film>(moshi)
         }
         return FilmsResponse(films.size, films)
     }
 
     // TODO: ensure not main thread
-    @ExperimentalStdlibApi
-    private fun save(
+    fun save(
         response: FilmsResponse
     ): Boolean {
-        val films = response.results.associate { film ->
-            Pair(
-                film.episode_id.toJson(moshi),
-                film.toJson(moshi)
-            )
-        }
-        val ids = films.keys
+        val films = response.results
+        val ids: List<String> = films.map { film -> film.episode_id.toString() }
         return commit {
-            putStringSet("ids", ids)
-            ids.forEach { id -> putString(id, films[id]) }
+            putString(Ids, ids.toJson(moshi))
+            films.forEach { film ->
+                val key = film.episode_id.toJson(moshi)
+                putString(key, film.toJson(moshi))
+            }
         }
     }
 
