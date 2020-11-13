@@ -27,11 +27,11 @@ const val Ids = "ids"
 //}
 
 // TODO: handle errors better
+@ExperimentalStdlibApi
 class Cache(
     private val prefs: SharedPreferences,
     private val moshi: Moshi
 ) {
-    @ExperimentalStdlibApi
     private val EmptyList: String = emptyList<String>()
         .toJson(moshi)
 
@@ -53,14 +53,12 @@ class Cache(
         bgHandler = Handler(bgLooper)
     }
 
-    @ExperimentalStdlibApi
     fun saveFilms(films: FilmsResponse) {
         bgHandler.post {
             save(films)
         }
     }
 
-    @ExperimentalStdlibApi
     fun getFilms(): LiveData<FilmsResponse> {
         val d = MutableLiveData<FilmsResponse>()
         bgHandler.post {
@@ -69,7 +67,6 @@ class Cache(
         return d
     }
 
-    @ExperimentalStdlibApi
     fun getFilm(episodeId: String): LiveData<Film> {
         val d = MutableLiveData<Film>()
         bgHandler.post {
@@ -78,9 +75,7 @@ class Cache(
         return d
     }
 
-    // TODO: ensure not main thread
     @WorkerThread
-    @ExperimentalStdlibApi
     fun load(): FilmsResponse {
         val ids: List<String> = prefs.getString(Ids, EmptyList)!!
             .fromJson(moshi)
@@ -88,17 +83,13 @@ class Cache(
         return FilmsResponse(films.size, films)
     }
 
-    // TODO: ensure not main thread
     @WorkerThread
-    @ExperimentalStdlibApi
     fun loadFilm(id: String): Film {
         val json = prefs.getString(id, null)!!
         return json.fromJson(moshi)
     }
 
-    // TODO: ensure not main thread
     @WorkerThread
-    @ExperimentalStdlibApi
     fun save(
         response: FilmsResponse
     ): Boolean {

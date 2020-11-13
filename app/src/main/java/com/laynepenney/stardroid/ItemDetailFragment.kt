@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.observe
@@ -17,12 +16,12 @@ import com.google.android.material.appbar.CollapsingToolbarLayout
  * in two-pane mode (on tablets) or a [ItemDetailActivity]
  * on handsets.
  */
+@ExperimentalStdlibApi
 class ItemDetailFragment : Fragment() {
 
     private lateinit var item: LiveData<Film>
     private lateinit var episodeId: String
 
-    @ExperimentalStdlibApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val cache = context!!.app.repo.cache

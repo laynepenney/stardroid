@@ -12,12 +12,12 @@ import java.util.concurrent.atomic.AtomicInteger
 @ExperimentalStdlibApi
 class Repo(
     private val api: Api,
-     val cache: Cache
+    val cache: Cache
 ) {
     val films = LiveResult(api.swapi.getFilms())
 
     init {
-        films.observeForever {result ->
+        films.observeForever { result ->
             if (result is Result.Success) {
                 cache.save(result.value)
             }
