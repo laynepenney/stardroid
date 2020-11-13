@@ -2,6 +2,7 @@ package com.laynepenney.stardroid
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
@@ -14,23 +15,53 @@ class Repo(
     private val api: Api,
     val cache: Cache
 ) {
-    val films = LiveResult(api.swapi.getFilms())
-
-    init {
-        films.observeForever { result ->
-            if (result is Result.Success) {
-                cache.save(result.value)
-            }
-        }
-    }
+    val films = FilmsResult(cache, api.swapi.getFilms())
 }
 
 private const val CALL_INITIAL = 0
 private const val CALL_INPROGRESS = 1
 private const val CALL_FINISHED = 2
 
+// TODO: using livedata with the cache is clunky
+@ExperimentalStdlibApi
+class FilmsResult(
+    private val cache: Cache,
+    call: Call<FilmsResponse>
+) : LiveResult<FilmsResponse>(call), Observer<FilmsResponse> {
+
+    private var data: LiveData<FilmsResponse>? = null
+
+    override fun onActive() {
+        data = cache.getFilms().also { d ->
+            d.observeForever(this)
+        }
+        super.onActive()
+    }
+
+    override fun onInactive() {
+        super.onInactive()
+        data?.removeObserver(this)
+    }
+
+    override fun setValue(result: Result<FilmsResponse>?) {
+        super.setValue(result)
+        if (result is Result.Success) {
+            cache.save(result.value)
+        }
+    }
+
+    override
+    fun onChanged(t: FilmsResponse?) {
+        t?.let {
+            // only set super
+            super.setValue(it.result())
+        }
+    }
+}
+
 // TODO: include cache
 // TODO: if call is unsuccessful, reset progress
+open
 class LiveResult<T : Any>(
     private val call: Call<T>
 ) : LiveData<Result<T>>() {
