@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+@ExperimentalStdlibApi
 class FilmsRecyclerAdapter(
     private val parentActivity: AppCompatActivity,
     val data: LiveResult<FilmsResponse>,
