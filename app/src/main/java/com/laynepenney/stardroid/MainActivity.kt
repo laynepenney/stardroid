@@ -1,5 +1,6 @@
 package com.laynepenney.stardroid
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,12 +10,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.laynepenney.stardroid.dummy.DummyContent
 
+@ExperimentalStdlibApi
 class MainActivity : AppCompatActivity() {
+
+    private var twoPane: Boolean = false
 
     override
     fun onCreate(savedInstanceState: Bundle?) {
@@ -27,12 +31,20 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<FloatingActionButton>(R.id.fab).visibility = View.GONE
 
+        if (findViewById<NestedScrollView>(R.id.item_detail_container) != null) {
+            // The detail container view will be present only in the
+            // large-screen layouts (res/values-w900dp).
+            // If this view is present, then the
+            // activity should be in two-pane mode.
+            twoPane = true
+        }
+
         setupRecyclerView(findViewById(R.id.item_list))
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
         val repo = app.repo
-        val adapter = FilmsRecyclerAdapter(repo.films)
+        val adapter = FilmsRecyclerAdapter(this, repo.films, twoPane)
         recyclerView.adapter = adapter
         repo.films.observe(this) { result ->
             Log.d("main | observe", "result=$result")
@@ -51,7 +63,9 @@ class MainActivity : AppCompatActivity() {
 }
 
 class FilmsRecyclerAdapter(
-    val data: LiveResult<FilmsResponse>
+    private val parentActivity: AppCompatActivity,
+    val data: LiveResult<FilmsResponse>,
+    private val twoPane: Boolean
 ) : RecyclerView.Adapter<FilmsRecyclerAdapter.ViewHolder>() {
 
     private var values: List<Film> = emptyList()
@@ -60,24 +74,26 @@ class FilmsRecyclerAdapter(
 
     init {
         onClickListener = View.OnClickListener { v ->
+            val item = v.tag as Film
+            val id = item.episode_id.toString()
 
-//            val item = v.tag as DummyContent.DummyItem
-//            if (twoPane) {
-//                val fragment = ItemDetailFragment().apply {
-//                    arguments = Bundle().apply {
-//                        putString(ItemDetailFragment.ARG_ITEM_ID, item.id)
-//                    }
-//                }
-//                parentActivity.supportFragmentManager
-//                    .beginTransaction()
-//                    .replace(R.id.item_detail_container, fragment)
-//                    .commit()
-//            } else {
-//                val intent = Intent(v.context, ItemDetailActivity::class.java).apply {
-//                    putExtra(ItemDetailFragment.ARG_ITEM_ID, item.id)
-//                }
-//                v.context.startActivity(intent)
-//            }
+            Log.d("main | onClick", "film=$item, id=$id, twopane=$twoPane")
+            if (twoPane) {
+                val fragment = ItemDetailFragment().apply {
+                    arguments = Bundle().apply {
+                        putString(ItemDetailFragment.ARG_ITEM_ID, id)
+                    }
+                }
+                parentActivity.supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.item_detail_container, fragment)
+                    .commit()
+            } else {
+                val intent = Intent(v.context, ItemDetailActivity::class.java).apply {
+                    putExtra(ItemDetailFragment.ARG_ITEM_ID, id)
+                }
+                v.context.startActivity(intent)
+            }
         }
     }
 

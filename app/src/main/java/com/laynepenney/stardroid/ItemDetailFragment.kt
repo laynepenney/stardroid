@@ -1,13 +1,15 @@
 package com.laynepenney.stardroid
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.laynepenney.stardroid.dummy.DummyContent
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.observe
+import com.google.android.material.appbar.CollapsingToolbarLayout
 
 /**
  * A fragment representing a single Item detail screen.
@@ -17,35 +19,32 @@ import com.laynepenney.stardroid.dummy.DummyContent
  */
 class ItemDetailFragment : Fragment() {
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private var item: DummyContent.DummyItem? = null
+    private lateinit var item: LiveData<Film>
+    private lateinit var episodeId: String
 
+    @ExperimentalStdlibApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            if (it.containsKey(ARG_ITEM_ID)) {
-                // Load the dummy content specified by the fragment
-                // arguments. In a real-world scenario, use a Loader
-                // to load content from a content provider.
-                item = DummyContent.ITEM_MAP[it.getString(ARG_ITEM_ID)]
-                activity?.findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout)?.title = item?.content
-            }
+        val cache = context!!.app.repo.cache
+        episodeId = arguments!!.getString(ARG_ITEM_ID)!!
+        item = cache.getFilm(episodeId)
+        item.observe(this) { film ->
+            activity?.findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout)?.title = film.title
+            view?.updateFilm(film)
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val rootView = inflater.inflate(R.layout.item_detail, container, false)
-
-        // Show the dummy content as text in a TextView.
-        item?.let {
-            rootView.findViewById<TextView>(R.id.item_detail).text = it.details
-        }
-
+        rootView.updateFilm(item.value)
         return rootView
+    }
+
+    fun View.updateFilm(film: Film?) {
+        this.findViewById<TextView>(R.id.item_detail)?.text = film?.opening_crawl
     }
 
     companion object {

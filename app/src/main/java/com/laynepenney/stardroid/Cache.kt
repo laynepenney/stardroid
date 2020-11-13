@@ -3,6 +3,12 @@ package com.laynepenney.stardroid
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import android.os.Handler
+import android.os.HandlerThread
+import android.os.Looper
+import androidx.annotation.WorkerThread
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapter
 
@@ -29,6 +35,9 @@ class Cache(
     private val EmptyList: String = emptyList<String>()
         .toJson(moshi)
 
+    private val bgLooper: Looper
+    private val bgHandler: Handler
+
     constructor(
         context: Context,
         api: Api
@@ -37,8 +46,40 @@ class Cache(
         moshi = api.moshi
     )
 
+    init {
+        val bgthread = HandlerThread("cache")
+        bgthread.start()
+        bgLooper = bgthread.looper
+        bgHandler = Handler(bgLooper)
+    }
+
+    @ExperimentalStdlibApi
+    fun saveFilms(films: FilmsResponse) {
+        bgHandler.post {
+            save(films)
+        }
+    }
+
+    @ExperimentalStdlibApi
+    fun getFilms(): LiveData<FilmsResponse> {
+        val d = MutableLiveData<FilmsResponse>()
+        bgHandler.post {
+            d.postValue(load())
+        }
+        return d
+    }
+
+    @ExperimentalStdlibApi
+    fun getFilm(episodeId: String): LiveData<Film> {
+        val d = MutableLiveData<Film>()
+        bgHandler.post {
+            d.postValue(loadFilm(episodeId))
+        }
+        return d
+    }
 
     // TODO: ensure not main thread
+    @WorkerThread
     @ExperimentalStdlibApi
     fun load(): FilmsResponse {
         val ids: List<String> = prefs.getString(Ids, EmptyList)!!
@@ -48,6 +89,7 @@ class Cache(
     }
 
     // TODO: ensure not main thread
+    @WorkerThread
     @ExperimentalStdlibApi
     fun loadFilm(id: String): Film {
         val json = prefs.getString(id, null)!!
@@ -55,6 +97,7 @@ class Cache(
     }
 
     // TODO: ensure not main thread
+    @WorkerThread
     @ExperimentalStdlibApi
     fun save(
         response: FilmsResponse

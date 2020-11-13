@@ -9,11 +9,20 @@ import retrofit2.Response
 import java.util.concurrent.atomic.AtomicInteger
 
 // Singleton class
+@ExperimentalStdlibApi
 class Repo(
     private val api: Api,
-    private val cache: Cache
+     val cache: Cache
 ) {
     val films = LiveResult(api.swapi.getFilms())
+
+    init {
+        films.observeForever {result ->
+            if (result is Result.Success) {
+                cache.save(result.value)
+            }
+        }
+    }
 }
 
 private const val CALL_INITIAL = 0
