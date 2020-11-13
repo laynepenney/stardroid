@@ -1,5 +1,6 @@
 package com.laynepenney.stardroid
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,13 +8,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import okhttp3.ResponseBody.Companion.toResponseBody
+import retrofit2.HttpException
+import retrofit2.Response
 
 @ExperimentalStdlibApi
 class MainActivity : AppCompatActivity() {
@@ -29,7 +34,10 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.title = title
 
-        findViewById<FloatingActionButton>(R.id.fab).visibility = View.GONE
+        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
+            val response = Response.error<Any>(400, "error with data".toResponseBody())
+            showError(HttpException(response))
+        }
 
         if (findViewById<NestedScrollView>(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the
@@ -58,7 +66,23 @@ class MainActivity : AppCompatActivity() {
 
     private fun showError(e: Throwable) {
         Log.e("main | showError", "error", e)
-        Toast.makeText(this, "error = ${e.message}", Toast.LENGTH_LONG).show()
+        Alert(e.message)
+            .show(supportFragmentManager, "alert")
+//        val alert = AlertDialog(this)
+//        Toast.makeText(this, "error = ${e.message}", Toast.LENGTH_LONG).show()
+    }
+}
+
+// TODO: res strings
+class Alert(
+    val msg: String?
+) : DialogFragment() {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return AlertDialog.Builder(requireContext(), theme)
+            .setTitle("Error")
+            .setMessage(msg ?: "unknown")
+            .setNeutralButton("OK") { dialog, which -> dismiss() }
+            .create()
     }
 }
 

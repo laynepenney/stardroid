@@ -41,12 +41,13 @@ class FilmsResult(
     override fun onInactive() {
         super.onInactive()
         data?.removeObserver(this)
+        data = null
     }
 
     override fun setValue(result: Result<FilmsResponse>?) {
         super.setValue(result)
         if (result is Result.Success) {
-            cache.save(result.value)
+            cache.saveFilms(result.value)
         }
     }
 
