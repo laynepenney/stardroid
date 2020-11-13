@@ -37,13 +37,15 @@ class ItemDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.item_detail, container, false)
+        val rootView = inflater.inflate(R.layout.film_detail, container, false)
         rootView.updateFilm(item.value)
         return rootView
     }
 
     fun View.updateFilm(film: Film?) {
         this.findViewById<TextView>(R.id.item_detail)?.text = film?.opening_crawl
+        this.findViewById<TextView>(R.id.director)?.text = film?.director
+        this.findViewById<TextView>(R.id.release_date)?.text = film?.release_date
     }
 
     companion object {

@@ -3,6 +3,7 @@ package com.laynepenney.stardroid
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -21,10 +22,12 @@ class ItemDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_item_detail)
         setSupportActionBar(findViewById(R.id.detail_toolbar))
 
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+        val fab = findViewById<FloatingActionButton>(R.id.fab)
+        fab.visibility = View.GONE
+//        fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show()
+//        }
 
         // Show the Up button in the action bar.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

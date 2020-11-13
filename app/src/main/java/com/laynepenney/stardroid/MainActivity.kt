@@ -34,10 +34,12 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.title = title
 
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
-            val response = Response.error<Any>(400, "error with data".toResponseBody())
-            showError(HttpException(response))
-        }
+        val fab = findViewById<FloatingActionButton>(R.id.fab)
+        fab.visibility = View.GONE
+//        fab.setOnClickListener {
+//            val response = Response.error<Any>(400, "error with data".toResponseBody())
+//            showError(HttpException(response))
+//        }
 
         if (findViewById<NestedScrollView>(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the
