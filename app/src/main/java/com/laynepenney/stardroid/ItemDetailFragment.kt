@@ -16,7 +16,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout
  * in two-pane mode (on tablets) or a [ItemDetailActivity]
  * on handsets.
  */
-@ExperimentalStdlibApi
+
 class ItemDetailFragment : Fragment() {
 
     private lateinit var item: LiveData<Film>

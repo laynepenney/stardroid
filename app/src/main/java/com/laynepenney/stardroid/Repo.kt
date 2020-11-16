@@ -10,7 +10,6 @@ import retrofit2.Response
 import java.util.concurrent.atomic.AtomicInteger
 
 // Singleton class
-@ExperimentalStdlibApi
 class Repo(
     private val api: Api,
     val cache: Cache
@@ -23,7 +22,6 @@ private const val CALL_INPROGRESS = 1
 private const val CALL_FINISHED = 2
 
 // TODO: using livedata with the cache is clunky
-@ExperimentalStdlibApi
 class FilmsResult(
     private val cache: Cache,
     call: Call<FilmsResponse>

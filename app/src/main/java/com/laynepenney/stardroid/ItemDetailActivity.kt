@@ -6,7 +6,6 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 
 /**
  * An activity representing a single Item detail screen. This
@@ -14,7 +13,7 @@ import com.google.android.material.snackbar.Snackbar
  * item details are presented side-by-side with a list of items
  * in a [ItemListActivity].
  */
-@ExperimentalStdlibApi
+
 class ItemDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

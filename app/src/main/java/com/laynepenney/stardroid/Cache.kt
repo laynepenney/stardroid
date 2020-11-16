@@ -27,7 +27,6 @@ const val Ids = "ids"
 //}
 
 // TODO: handle errors better
-@ExperimentalStdlibApi
 class Cache(
     private val prefs: SharedPreferences,
     private val moshi: Moshi
@@ -113,13 +112,13 @@ class Cache(
     }
 }
 
-@ExperimentalStdlibApi
+@OptIn(ExperimentalStdlibApi::class)
 inline fun <reified T : Any> T.toJson(
     moshi: Moshi
 ): String = moshi.adapter<T>()
     .toJson(this)
 
-@ExperimentalStdlibApi
+@OptIn(ExperimentalStdlibApi::class)
 inline fun <reified T : Any> String.fromJson(
     moshi: Moshi
 ): T = moshi.adapter<T>()

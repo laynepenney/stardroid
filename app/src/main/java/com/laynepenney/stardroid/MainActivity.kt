@@ -16,11 +16,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import okhttp3.ResponseBody.Companion.toResponseBody
-import retrofit2.HttpException
-import retrofit2.Response
 
-@ExperimentalStdlibApi
+
 class MainActivity : AppCompatActivity() {
 
     private var twoPane: Boolean = false
@@ -88,7 +85,7 @@ class Alert(
     }
 }
 
-@ExperimentalStdlibApi
+
 class FilmsRecyclerAdapter(
     private val parentActivity: AppCompatActivity,
     val data: LiveResult<FilmsResponse>,

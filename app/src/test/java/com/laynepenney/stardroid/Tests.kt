@@ -29,7 +29,7 @@ class MoshiTest {
         throw FileNotFoundException("no file found at ${filmsFile.absolutePath}")
     }
 
-    @ExperimentalStdlibApi
+    
     @Test
     fun testFilmsParsing() {
         val adapter = api.moshi.adapter<FilmsResponse>()

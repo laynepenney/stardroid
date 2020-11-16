@@ -3,8 +3,6 @@ package com.laynepenney.stardroid
 import android.app.Application
 import android.content.Context
 
-// TODO: @OptIn(...)
-@ExperimentalStdlibApi
 class App : Application() {
     private lateinit var _repo: Repo
 
@@ -20,7 +18,6 @@ class App : Application() {
     }
 }
 
-@ExperimentalStdlibApi
 val Context.app: App
     get() = when (this) {
         is App -> this

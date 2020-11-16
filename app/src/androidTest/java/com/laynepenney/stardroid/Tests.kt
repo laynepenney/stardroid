@@ -18,7 +18,7 @@ import org.junit.Assert.*
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-@ExperimentalStdlibApi
+
 @RunWith(AndroidJUnit4::class)
 class CacheTest {
     val api = Api()
