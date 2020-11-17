@@ -19,7 +19,8 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/Theme.AndroidFilmThings.PopupOverlay" />
+                app:popupTheme="@style/Theme.AndroidFilmThings.PopupOverlay"
+                app:title="@string/app_name" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

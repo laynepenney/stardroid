@@ -3,6 +3,8 @@ package com.laynepenney.stardroid
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -44,6 +46,13 @@ class Api(
     ) : this(
         moshi = moshi,
         retrofit = Retrofit.Builder()
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.HEADERS
+                    })
+                    .build()
+            )
             .baseUrl("https://swapi.dev/api/")
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
