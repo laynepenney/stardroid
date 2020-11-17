@@ -7,21 +7,21 @@
 
     <fragment
         android:id="@+id/film_list"
-        android:name="com.laynepenney.stardroid.ItemListFragment"
+        android:name="com.laynepenney.stardroid.FilmListFragment"
         tools:layout="@layout/fragment_item_list">
 
         <action
             android:id="@+id/action_view_film_detail"
             app:destination="@+id/film_detail"
-            app:enterAnim="@android:anim/slide_in_right"
-            app:exitAnim="@android:anim/slide_out_left"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
         android:id="@+id/film_detail"
-        android:name="com.laynepenney.stardroid.ItemDetailFragment"
+        android:name="com.laynepenney.stardroid.FilmDetailFragment"
         tools:layout="@layout/fragment_item_detail">
 
         <argument

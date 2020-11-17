@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +28,10 @@ class FilmsAdapter : ListAdapter<Film, FilmsAdapter.ViewHolder>(Callback()) {
         val item = getItem(position)
         holder.idView.text = item.title
         holder.contentView.text = item.release_date
+        holder.itemView.setOnClickListener {
+            val action = FilmListFragmentDirections.actionViewFilmDetail(item.episode_id.toString())
+            it.findNavController().navigate(action)
+        }
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
