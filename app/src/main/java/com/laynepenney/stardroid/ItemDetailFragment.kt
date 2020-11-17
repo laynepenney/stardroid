@@ -24,8 +24,8 @@ class ItemDetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val cache = context!!.app.repo.cache
-        episodeId = arguments!!.getString(ARG_ITEM_ID)!!
+        val cache = requireContext().app.repo.cache
+        episodeId = requireArguments().getString(ARG_ITEM_ID)!!
         item = cache.getFilm(episodeId)
         item.observe(this) { film ->
             activity?.findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout)?.title = film.title

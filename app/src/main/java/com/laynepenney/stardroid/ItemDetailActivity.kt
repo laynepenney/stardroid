@@ -18,7 +18,7 @@ class ItemDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_item_detail)
+        setContentView(R.layout.fragment_item_detail)
         setSupportActionBar(findViewById(R.id.detail_toolbar))
 
         val fab = findViewById<FloatingActionButton>(R.id.fab)

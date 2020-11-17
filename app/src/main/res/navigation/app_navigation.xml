@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/app_navigation">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_navigation"
+    app:startDestination="@id/film_list">
 
+    <fragment
+        android:id="@+id/film_list"
+        android:name="com.laynepenney.stardroid.ItemListFragment"
+        tools:layout="@layout/fragment_item_list">
+
+        <action
+            android:id="@+id/action_view_film_detail"
+            app:destination="@+id/film_detail"
+            app:enterAnim="@android:anim/slide_in_right"
+            app:exitAnim="@android:anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/film_detail"
+        android:name="com.laynepenney.stardroid.ItemDetailFragment"
+        tools:layout="@layout/fragment_item_detail">
+
+        <argument
+            android:name="episodeId"
+            app:argType="string" />
+    </fragment>
 </navigation>
